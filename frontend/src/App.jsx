@@ -14,14 +14,57 @@ function App() {
 	const [count, setCount] = useState(0);
 	const [randomItem, setRandomItem] = useState(null);
 	const [inputValue, setInputValue] = useState('');
+	const ingredients = [];
+	const [calories, setCalories] = useState(100);
+	const [fat, setFat] = useState(5);
+	const [cholesterol, setCholesterol] = useState(0);
+	const [carbohydrates, setCarbohydrates] = useState(17);
+	const [fiber, setFiber] = useState(4);
+	const [sugars, setSugars] = useState(0);
+	const [protein, setProtein] = useState(5);
+	const [instrOpen, setInstrOpen] = useState(false);
+
+	useEffect(() => {
+		const handleKeyDown = (event) => {
+			if(event.key == 'Escape') {
+				setInstrOpen(false);
+			}
+		};
+		const handleClick = (event) => {
+			if(instrOpen) {
+				setInstrOpen(false);
+			}
+		};
+		document.addEventListener('mousedown', handleClick);
+		document.addEventListener('keydown', handleKeyDown);
+		return () => {
+			document.removeEventListener('mousedown', handleClick);
+			document.removeEventListener('keydown', handleKeyDown);
+		};
+	}, []);
 
 	const handleEnter = (event) => {
 		setInputValue(event.target.value);
 	};
 
+	const handleInstrClick = () => {
+		setInstrOpen(!instrOpen);
+	}
+
 	function handleSubmit(e) {
 		e.preventDefault();
 		const form = e.target;
+		//const value = e.target.input.value;
+		//const splitValue = inputValue.split('\n');
+		//splitValue.forEach((line) => {
+		//	fetch('/api/input', {method: form.method, body: line});
+		//})
+		//console.log();
+		const formData = new FormData(form);
+		fetch('/api/input', {method: form.method, body: formData});
+		console.log(formData);
+		//const formJson = Object.fromEntries(formData.entries());
+    	//console.log(formJson);
 	}
 
 	async function getRandomItem() {
@@ -49,15 +92,8 @@ function App() {
 						<input className="entryUnit" placeholder="unit (optional)"></input>
 					</div>
 	*/
-	return (
-		<>
-			<h1>Recipe Nutrition Finder</h1>
-			<div className="mainDiv">
-				<form method="post" onSubmit={handleSubmit}>
-					<textarea className="inputField" placeholder="Ingredient name, quantity, unit (optional)"></textarea>
-					<button className="enter" onClick={handleEnter}>Enter</button>
-				</form>
-				<div className="ingredientArea">
+	/*
+	<div className="ingredientArea">
 					<ul className="ingredientList">
 						<div className="ingredient"><button className="ingredientX">X</button>
 							<div className="ingredientName">Pasta</div>
@@ -67,6 +103,37 @@ function App() {
 						<div className="ingredient"><button className="ingredientX">X</button>{inputValue}</div>
 					</ul>
 				</div>
+	*/
+	return (
+		<>
+			<h1>Recipe Analysis Tool</h1>
+			<div className="mainDiv">
+				{instrOpen && <div className="instructions">
+					<h2>How it Works</h2>
+					<p>Type the ingredient list for a recipe you want to analyze in the entry field,</p>
+					<p>each ingredient on an inidividual line. Then click 'Enter' to submit the query!</p>
+					<p>In the 'Nutrition' category we will have the nutritional information for your recipe. </p>
+					<p>In the 'Price' category we will estimate the cost of the recipe you provided.</p>
+				</div>}
+				<form className="inputForm" method="post" onSubmit={handleSubmit}>
+					<textarea className="inputField" name='input' placeholder="Quantity, unit, ingredient name..."></textarea>
+					<div className="buttonArea">
+						<button className="enter" onClick={handleEnter}>Enter</button>
+						<button className="infoButton" onClick={handleInstrClick}>How it Works</button>
+					</div>
+				</form>
+				<div className="nutritionInfo">
+					<h2>Nutrition</h2>
+					<div className="nutrItem"><div className="label">Calories:</div><div className="value">{calories}</div></div>
+					<div className="nutrItem"><div className="label">Total Fat:</div><div className="value">{fat}g</div></div>
+					<div className="nutrItem"><div className="label">Cholesterol:</div><div className="value">{cholesterol}g</div></div>
+					<div className="nutrItem"><div className="label">Carbohydrates:</div><div className="value">{carbohydrates}g</div></div>
+					<div className="nutrItem"><div className="label">Fibers:</div><div className="value">{fiber}g</div></div>
+					<div className="nutrItem"><div className="label">Sugars:</div><div className="value">{sugars}g</div></div>
+					<div className="nutrItem"><div className="label">Protein:</div><div className="value">{protein}g</div></div>
+				</div>
+				
+				
 				
 				{/* Here's a trick you can use! If you want to render a JSX element only when a
 				state variable becomes not `null` (i.e. truthy), you can do a short circuit
