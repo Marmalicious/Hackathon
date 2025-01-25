@@ -23,6 +23,7 @@ don't conflict with the ones on your main system by running:
 
 ```ps
 > python -m venv .venv
+// Set-ExecutionPolicy Unrestricted -Scope Process
 > .\.venv\Scripts\activate
 ```
 
