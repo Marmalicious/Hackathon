@@ -33,22 +33,6 @@
 	}
 }
 
-.inputField {
-	display: flex;
-	width: 80vw;
-	align-items: center;
-	justify-content: center;
-	padding: 10px;
-	height: 20vw;
-	font-size: 24px;
-	text-align: left;
-	font-family: Arial, Helvetica, sans-serif;
-}
-
-.enter {
-	color: white;
-	margin: 1vw;
-}
 
 .mainDiv {
 	display: flex;
@@ -196,6 +180,7 @@
 
 .inputForm {
 	display: flex;
+	width: 60vw;
 }
 
 .inputForm .buttonArea {
@@ -208,7 +193,20 @@
 .inputForm .inputField {
 	resize: none;
 	width: 42vw;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 10px;
+	height: 20vw;
+	font-size: 24px;
+	text-align: left;
+	font-family: Arial, Helvetica, sans-serif;
 }
+
+.enter {
+	color: white;
+	margin: 1vw;
+} 
 
 .instructions {
 	width: 90vw;
@@ -226,6 +224,11 @@
 	margin-left: 5vw;
 	margin-right: 5vw;
 	font-size: 20px;
+}
+
+.instrClose {
+	color: white;
+	background-color: gray;
 }
 
 .read-the-docs {

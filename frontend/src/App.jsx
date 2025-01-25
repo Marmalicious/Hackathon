@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
@@ -20,9 +20,14 @@ function App() {
 	const [cholesterol, setCholesterol] = useState(0);
 	const [carbohydrates, setCarbohydrates] = useState(17);
 	const [fiber, setFiber] = useState(4);
-	const [sugars, setSugars] = useState(0);
+	const [sugar, setSugar] = useState(0);
 	const [protein, setProtein] = useState(5);
 	const [instrOpen, setInstrOpen] = useState(false);
+	const instrButRef = useRef(null);
+
+	const handleInstrClick = () => {
+		setInstrOpen(true);
+	}
 
 	useEffect(() => {
 		const handleKeyDown = (event) => {
@@ -31,14 +36,15 @@ function App() {
 			}
 		};
 		const handleClick = (event) => {
-			if(instrOpen) {
+			console.log(instrOpen);
+			if(instrOpen && instrButRef.current && !instrButRef.current.contains(event.target)) {
 				setInstrOpen(false);
 			}
 		};
-		document.addEventListener('mousedown', handleClick);
+		document.addEventListener('click', handleClick);
 		document.addEventListener('keydown', handleKeyDown);
 		return () => {
-			document.removeEventListener('mousedown', handleClick);
+			document.removeEventListener('click', handleClick);
 			document.removeEventListener('keydown', handleKeyDown);
 		};
 	}, []);
@@ -47,9 +53,6 @@ function App() {
 		setInputValue(event.target.value);
 	};
 
-	const handleInstrClick = () => {
-		setInstrOpen(!instrOpen);
-	}
 
 	function handleSubmit(e) {
 		e.preventDefault();
@@ -85,6 +88,18 @@ function App() {
 		getRandomItem();
 	}, []);
 
+
+	async function getNutrData() { // link to enter
+		const res = await fetch(`/api/get-nutr`);
+		const data = await res.json();
+		setCalories(data.calories);
+		setFat(data.fat);
+		setCholesterol(data.cholesterol);
+		setCarbohydrates(data.carbohydrates);
+		setFibers(data.fiber);
+		setSugar(data.sugar);
+		setProtein(data.protein);
+	}
 	/*
 	<div className="entryFields">
 						<input className="entryName" placeholder="Ingredient name..."></input>
@@ -108,18 +123,18 @@ function App() {
 		<>
 			<h1>Recipe Analysis Tool</h1>
 			<div className="mainDiv">
-				{instrOpen && <div className="instructions">
+				{instrOpen ? <div className="instructions">
 					<h2>How it Works</h2>
 					<p>Type the ingredient list for a recipe you want to analyze in the entry field,</p>
 					<p>each ingredient on an inidividual line. Then click 'Enter' to submit the query!</p>
 					<p>In the 'Nutrition' category we will have the nutritional information for your recipe. </p>
 					<p>In the 'Price' category we will estimate the cost of the recipe you provided.</p>
-				</div>}
+				</div> : null}
 				<form className="inputForm" method="post" onSubmit={handleSubmit}>
 					<textarea className="inputField" name='input' placeholder="Quantity, unit, ingredient name..."></textarea>
 					<div className="buttonArea">
 						<button className="enter" onClick={handleEnter}>Enter</button>
-						<button className="infoButton" onClick={handleInstrClick}>How it Works</button>
+						<button className="infoButton" ref={instrButRef} onClick={handleInstrClick}>How it Works</button>
 					</div>
 				</form>
 				<div className="nutritionInfo">
@@ -128,8 +143,8 @@ function App() {
 					<div className="nutrItem"><div className="label">Total Fat:</div><div className="value">{fat}g</div></div>
 					<div className="nutrItem"><div className="label">Cholesterol:</div><div className="value">{cholesterol}g</div></div>
 					<div className="nutrItem"><div className="label">Carbohydrates:</div><div className="value">{carbohydrates}g</div></div>
-					<div className="nutrItem"><div className="label">Fibers:</div><div className="value">{fiber}g</div></div>
-					<div className="nutrItem"><div className="label">Sugars:</div><div className="value">{sugars}g</div></div>
+					<div className="nutrItem"><div className="label">Fiber:</div><div className="value">{fiber}g</div></div>
+					<div className="nutrItem"><div className="label">Sugar:</div><div className="value">{sugar}g</div></div>
 					<div className="nutrItem"><div className="label">Protein:</div><div className="value">{protein}g</div></div>
 				</div>
 				
