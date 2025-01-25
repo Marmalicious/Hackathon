@@ -33,8 +33,122 @@
 	}
 }
 
-.card {
-	padding: 2em;
+.inputField {
+	display: flex;
+	width: 80vw;
+	align-items: center;
+	justify-content: center;
+	padding: 10px;
+	height: 20vw;
+	font-size: 24px;
+	text-align: left;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.enter {
+	color: white;
+	margin: 1vw;
+}
+
+.mainDiv {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;	
+
+}
+
+.ingredientArea {
+	/*padding: 1.5vw;
+	background-color: rgb(172, 172, 172);
+	border-radius: 4px;
+	*/
+	width: 60vw;
+}
+.entryFields {
+	border-radius: 4px;
+	border: 8px solid rgb(54, 54, 54);
+	padding: 0vw;
+	font-size: 24px;
+}
+
+.entryName {
+	font-size: 24px;
+	width: 35vw;
+}
+.entryQuantity {
+	font-size: 24px;
+	width:15vw;
+}
+.entryUnit {
+	font-size: 24px;
+	width: 20vw;
+}
+
+.ingredient {
+	border-radius: 4px;
+	padding: 0.6em 1.2em;
+	font-size: 1.5em;
+	font-weight: 500;
+	color: black;
+	font-family: inherit;
+	background-color: rgb(255, 255, 255);
+	padding: 1vw;
+	margin: 1.5vw;
+	display: flex;
+	align-items: center;
+	width: 52vw;
+
+}
+
+.ingredientName {
+	padding: 1vw;
+	width: 23vw;
+	background-color: lightgray;
+	margin: 0.25vw;
+	border-radius: 4px;
+	text-align: left;
+}
+
+.ingredientQuantity {
+	padding: 1vw;
+	width: 6vw;
+	margin: 0.25vw;
+	background-color: rgb(82, 82, 82);
+	border-radius: 4px;
+	text-align: left;
+}
+
+.ingredientUnit {
+	padding: 1vw;
+	width: 10vw;
+	margin: 0.25vw;
+	background-color: rgb(82, 82, 82);
+	border-radius: 4px;
+	text-align: left;
+}
+
+.ingredientX {
+	background-color: lightcoral;
+	width: 40px;
+	height: 40px;
+	padding: 0;
+	color: darkred;
+	font-weight: bold;
+	font-size: 24px;
+	margin-right: 2.5%;
+	border-radius: 4px;
+	border: 4px solid rgb(172, 0, 0);
+	text-align: center;
+	vertical-align: center;
+	line-height: 1px;
+
+}
+
+.ingredientList {
+	padding: 1.5vw;
+	background-color: lightgray;
+	border-radius: 8px;
 }
 
 .read-the-docs {

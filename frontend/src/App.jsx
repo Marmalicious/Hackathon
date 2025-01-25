@@ -13,6 +13,16 @@ With App.jsx, we can also define global variables and routes to store informatio
 function App() {
 	const [count, setCount] = useState(0);
 	const [randomItem, setRandomItem] = useState(null);
+	const [inputValue, setInputValue] = useState('');
+
+	const handleEnter = (event) => {
+		setInputValue(event.target.value);
+	};
+
+	function handleSubmit(e) {
+		e.preventDefault();
+		const form = e.target;
+	}
 
 	async function getRandomItem() {
 		/*
@@ -32,23 +42,32 @@ function App() {
 		getRandomItem();
 	}, []);
 
+	/*
+	<div className="entryFields">
+						<input className="entryName" placeholder="Ingredient name..."></input>
+						<input className="entryQuantity" placeholder="quantity"></input>
+						<input className="entryUnit" placeholder="unit (optional)"></input>
+					</div>
+	*/
 	return (
 		<>
-			<div>
-				<a href="https://vitejs.dev" target="_blank">
-					<img src={viteLogo} className="logo" alt="Vite logo" />
-				</a>
-				<a href="https://react.dev" target="_blank">
-					<img src={reactLogo} className="logo react" alt="React logo" />
-				</a>
-			</div>
-			<h1>Vite + React</h1>
-			<div className="card">
-				<button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
-				<p>
-					Edit <code>src/App.jsx</code> and save to test HMR
-				</p>
-
+			<h1>Recipe Nutrition Finder</h1>
+			<div className="mainDiv">
+				<form method="post" onSubmit={handleSubmit}>
+					<textarea className="inputField" placeholder="Ingredient name, quantity, unit (optional)"></textarea>
+					<button className="enter" onClick={handleEnter}>Enter</button>
+				</form>
+				<div className="ingredientArea">
+					<ul className="ingredientList">
+						<div className="ingredient"><button className="ingredientX">X</button>
+							<div className="ingredientName">Pasta</div>
+							<div className="ingredientQuantity">1</div>
+							<div className="ingredientUnit">Cup</div>
+						</div>
+						<div className="ingredient"><button className="ingredientX">X</button>{inputValue}</div>
+					</ul>
+				</div>
+				
 				{/* Here's a trick you can use! If you want to render a JSX element only when a
 				state variable becomes not `null` (i.e. truthy), you can do a short circuit
 				operation with `&&`. */}
