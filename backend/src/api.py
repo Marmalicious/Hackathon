@@ -7,6 +7,7 @@ $ fastapi dev src/api.py
 import random
 
 from fastapi import FastAPI
+from pydantic import BaseModel
 
 # The app which manages all of the API routes
 app = FastAPI()
@@ -42,3 +43,15 @@ def read_item(item_id: int, q: str | None = None) -> dict[str, int | str | None]
 def get_random_item() -> dict[str, int]:
     """Get an item with a random ID."""
     return {"item_id": random.randint(0, 1000)}
+
+class Ingredient(BaseModel):
+    name: str
+    quantity: float
+    unit: str
+
+class Line(BaseModel):
+    text: str
+
+@app.post("/input")
+async def create_item(item: Line):
+    return item
