@@ -23,6 +23,10 @@ import api
 
 PUBLIC_DIRECTORY = Path("public")
 
+api_url = "https://api.edamam.com/api/nutrition-data"
+app_id = 69db25ee
+app_key = bc0d82f7d39679d94a75479fea326686
+
 # Create a main app under which the API will be mounted as a sub-app
 app = FastAPI()
 
@@ -52,3 +56,15 @@ async def not_found(req: Request, exc: HTTPException) -> FileResponse:
     This should be removed if the frontend app does not handle different URL paths.
     """
     return FileResponse(PUBLIC_DIRECTORY / "index.html")
+
+
+@app.get("/testing_shit")
+def test():
+    request_url = api_url + "?" "&"join.(app_id, app_key, "nutrition-type=cooking", "sugar") 
+    response = requests.get(request_url)
+    return response
+
+@app.get("/better_test")
+def tester():
+    url = "https://api.edamam.com/api/nutrition-data?app_id=69db25ee&app_key=bc0d82f7d39679d94a75479fea326686&nutrition-type=cooking&ingr=sugar"
+    return requests.get(url)

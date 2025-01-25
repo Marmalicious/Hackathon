@@ -4,7 +4,7 @@ To run this API, use the FastAPI CLI
 $ fastapi dev src/api.py
 """
 
-import random
+import random, requests
 
 from fastapi import FastAPI
 
@@ -42,3 +42,58 @@ def read_item(item_id: int, q: str | None = None) -> dict[str, int | str | None]
 def get_random_item() -> dict[str, int]:
     """Get an item with a random ID."""
     return {"item_id": random.randint(0, 1000)}
+
+
+api_url = "https://api.edamam.com/api/nutrition-data?app_id=69db25ee&app_key=bc0d82f7d39679d94a75479fea326686&nutrition-type=cooking&ingr="
+app_id = "69db25ee"
+app_key = "bc0d82f7d39679d94a75479fea326686"
+
+class Total:
+    def __init__(self, cal=0, prot=0, chole=0, carb=0, fiber=0, fat=0, sugar=0):
+        self.cal = cal
+        self.prot = prot
+        self.chole = chole
+        self.carb = carb
+        self.fiber = fiber
+        self.fat = fat
+        self.sugar = sugar
+
+    #def __str__(self):
+        
+
+@app.get("/test")
+def test():
+    t = Total()
+    inp = "1 taco\n2 chocolate\n1 mango"
+
+    in_arr = inp.split("\n")
+
+    for ingri in in_arr:
+        Reader(ingri, t)
+
+    return t.cal, t.prot, t.chole, t.carb, t.fiber, t.fat, t.sugar
+    
+
+def Reader(ingri, t: Total):
+    youarel = api_url + ingri
+    init = requests.get(youarel).json()
+
+    return Updater(init, t);
+
+def Updater(init, t: Total):
+    t.cal += init.get("calories", 0)
+    t.prot += Parser(init, "PROCNT")
+    t.chole += Parser(init, "CHOLE")
+    t.carb += Parser(init, "CHOCDF.net")
+    t.fiber += Parser(init, "FIBTG")
+    t.fat += Parser(init, "FAT")
+    t.sugar += Parser(init, "SUGAR")
+
+    return
+
+def Parser(top, key): 
+    middle = top.get("totalNutrients", None)
+
+    ground = middle.get(key, None)
+
+    return ground.get("quantity", 0);
