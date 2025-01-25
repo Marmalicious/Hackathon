@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
@@ -13,6 +13,62 @@ With App.jsx, we can also define global variables and routes to store informatio
 function App() {
 	const [count, setCount] = useState(0);
 	const [randomItem, setRandomItem] = useState(null);
+	const [inputValue, setInputValue] = useState('');
+	const ingredients = [];
+	const [calories, setCalories] = useState(100);
+	const [fat, setFat] = useState(5);
+	const [cholesterol, setCholesterol] = useState(0);
+	const [carbohydrates, setCarbohydrates] = useState(17);
+	const [fiber, setFiber] = useState(4);
+	const [sugar, setSugar] = useState(0);
+	const [protein, setProtein] = useState(5);
+	const [instrOpen, setInstrOpen] = useState(false);
+	const instrButRef = useRef(null);
+
+	const handleInstrClick = () => {
+		setInstrOpen(true);
+	}
+
+	useEffect(() => {
+		const handleKeyDown = (event) => {
+			if(event.key == 'Escape') {
+				setInstrOpen(false);
+			}
+		};
+		const handleClick = (event) => {
+			console.log(instrOpen);
+			if(instrOpen && instrButRef.current && !instrButRef.current.contains(event.target)) {
+				setInstrOpen(false);
+			}
+		};
+		document.addEventListener('click', handleClick);
+		document.addEventListener('keydown', handleKeyDown);
+		return () => {
+			document.removeEventListener('click', handleClick);
+			document.removeEventListener('keydown', handleKeyDown);
+		};
+	}, []);
+
+	const handleEnter = (event) => {
+		setInputValue(event.target.value);
+	};
+
+
+	function handleSubmit(e) {
+		e.preventDefault();
+		const form = e.target;
+		//const value = e.target.input.value;
+		//const splitValue = inputValue.split('\n');
+		//splitValue.forEach((line) => {
+		//	fetch('/api/input', {method: form.method, body: line});
+		//})
+		//console.log();
+		const formData = new FormData(form);
+		fetch('/api/input', {method: form.method, body: formData});
+		console.log(formData);
+		//const formJson = Object.fromEntries(formData.entries());
+    	//console.log(formJson);
+	}
 
 	async function getRandomItem() {
 		/*
@@ -32,23 +88,68 @@ function App() {
 		getRandomItem();
 	}, []);
 
+
+	async function getNutrData() { // link to enter
+		const res = await fetch(`/api/get-nutr`);
+		const data = await res.json();
+		setCalories(data.calories);
+		setFat(data.fat);
+		setCholesterol(data.cholesterol);
+		setCarbohydrates(data.carbohydrates);
+		setFibers(data.fiber);
+		setSugar(data.sugar);
+		setProtein(data.protein);
+	}
+	/*
+	<div className="entryFields">
+						<input className="entryName" placeholder="Ingredient name..."></input>
+						<input className="entryQuantity" placeholder="quantity"></input>
+						<input className="entryUnit" placeholder="unit (optional)"></input>
+					</div>
+	*/
+	/*
+	<div className="ingredientArea">
+					<ul className="ingredientList">
+						<div className="ingredient"><button className="ingredientX">X</button>
+							<div className="ingredientName">Pasta</div>
+							<div className="ingredientQuantity">1</div>
+							<div className="ingredientUnit">Cup</div>
+						</div>
+						<div className="ingredient"><button className="ingredientX">X</button>{inputValue}</div>
+					</ul>
+				</div>
+	*/
 	return (
 		<>
-			<div>
-				<a href="https://vitejs.dev" target="_blank">
-					<img src={viteLogo} className="logo" alt="Vite logo" />
-				</a>
-				<a href="https://react.dev" target="_blank">
-					<img src={reactLogo} className="logo react" alt="React logo" />
-				</a>
-			</div>
-			<h1>Vite + React</h1>
-			<div className="card">
-				<button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
-				<p>
-					Edit <code>src/App.jsx</code> and save to test HMR
-				</p>
-
+			<h1>Recipe Analysis Tool</h1>
+			<div className="mainDiv">
+				{instrOpen ? <div className="instructions">
+					<h2>How it Works</h2>
+					<p>Type the ingredient list for a recipe you want to analyze in the entry field,</p>
+					<p>each ingredient on an inidividual line. Then click 'Enter' to submit the query!</p>
+					<p>In the 'Nutrition' category we will have the nutritional information for your recipe. </p>
+					<p>In the 'Price' category we will estimate the cost of the recipe you provided.</p>
+				</div> : null}
+				<form className="inputForm" method="post" onSubmit={handleSubmit}>
+					<textarea className="inputField" name='input' placeholder="Quantity, unit, ingredient name..."></textarea>
+					<div className="buttonArea">
+						<button className="enter" onClick={handleEnter}>Enter</button>
+						<button className="infoButton" ref={instrButRef} onClick={handleInstrClick}>How it Works</button>
+					</div>
+				</form>
+				<div className="nutritionInfo">
+					<h2>Nutrition</h2>
+					<div className="nutrItem"><div className="label">Calories:</div><div className="value">{calories}</div></div>
+					<div className="nutrItem"><div className="label">Total Fat:</div><div className="value">{fat}g</div></div>
+					<div className="nutrItem"><div className="label">Cholesterol:</div><div className="value">{cholesterol}g</div></div>
+					<div className="nutrItem"><div className="label">Carbohydrates:</div><div className="value">{carbohydrates}g</div></div>
+					<div className="nutrItem"><div className="label">Fiber:</div><div className="value">{fiber}g</div></div>
+					<div className="nutrItem"><div className="label">Sugar:</div><div className="value">{sugar}g</div></div>
+					<div className="nutrItem"><div className="label">Protein:</div><div className="value">{protein}g</div></div>
+				</div>
+				
+				
+				
 				{/* Here's a trick you can use! If you want to render a JSX element only when a
 				state variable becomes not `null` (i.e. truthy), you can do a short circuit
 				operation with `&&`. */}
