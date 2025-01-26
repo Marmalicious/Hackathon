@@ -24,6 +24,7 @@ function App() {
 	const [protein, setProtein] = useState(5);
 	const [instrOpen, setInstrOpen] = useState(false);
 	const instrButRef = useRef(null);
+	const [nutrOpen, setNutrOpen] = useState(false);
 
 	const handleInstrClick = () => {
 		setInstrOpen(true);
@@ -94,19 +95,18 @@ function App() {
 
 
 	
-	async function handleSubmit(e) {
-		e.preventDefault();
-		const form = e.target;
-		const value = e.target.input.value;
-		//const splitValue = inputValue.split('\n');
-		//splitValue.forEach((line) => {
-		//	fetch('/api/input', {method: form.method, body: line});
-		//})
-		//console.log();
-		const formData = new FormData(form);
-		//console.log({ value});
-		
-		try {
+		async function handleSubmit(e) {
+			e.preventDefault();
+			const form = e.target;
+			const value = e.target.input.value;
+			//const splitValue = inputValue.split('\n');
+			//splitValue.forEach((line) => {
+			//    fetch('/api/input', {method: form.method, body: line});
+			//})
+			//console.log();
+			const formData = new FormData(form);
+			//console.log({ value});
+	
 			const res = await fetch('/api/input', {
 				method: 'POST',
 				headers: {
@@ -117,11 +117,17 @@ function App() {
 			if (!res.ok) {
 				console.log("rip")
 			}
-			console.log(await res.json())
-			handleUpdate();
-		} catch (e) {
-			console.log(e)
-		}
+			console.log(res);
+			const data = await res.json();
+			//handleUpdate();
+			setCalories(data[0]);
+			setProtein(data[1].toFixed(1));
+			setCholesterol(data[2].toFixed(1));
+			setCarbohydrates(data[3].toFixed(1));
+			setFiber(data[4].toFixed(1));
+			setFat(data[5].toFixed(1));
+			setSugar(data[6].toFixed(1));
+			console.log(data);
 
 			
 		//const formData = new FormData(form);
@@ -206,16 +212,16 @@ function App() {
 						<button className="infoButton" ref={instrButRef} onClick={handleInstrClick}>How it Works</button>
 					</div>
 				</form>
-				<div className="nutritionInfo">
+				{nutrOpen && <div className="nutritionInfo">
 					<h2>Nutrition</h2>
-					<div className="nutrItem"><div className="label">Calories:</div><div className="value">{randomItem}</div></div>
+					<div className="nutrItem"><div className="label">Calories:</div><div className="value">{calories}</div></div>
 					<div className="nutrItem"><div className="label">Total Fat:</div><div className="value">{fat}g</div></div>
 					<div className="nutrItem"><div className="label">Cholesterol:</div><div className="value">{cholesterol}g</div></div>
 					<div className="nutrItem"><div className="label">Carbohydrates:</div><div className="value">{carbohydrates}g</div></div>
 					<div className="nutrItem"><div className="label">Fiber:</div><div className="value">{fiber}g</div></div>
 					<div className="nutrItem"><div className="label">Sugar:</div><div className="value">{sugar}g</div></div>
 					<div className="nutrItem"><div className="label">Protein:</div><div className="value">{protein}g</div></div>
-				</div>
+				</div>}
 				
 				
 				
