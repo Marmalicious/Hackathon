@@ -59,13 +59,6 @@ class Total:
         self.sugar = sugar
 
     #def __str__(self):
-        
-class Data(BaseModel):
-    data: str
-
-@app.post("/unc")
-def uncl(data):
-    return data;
 
 @app.post("/input")
 async def recieve(data: dict):
@@ -74,47 +67,31 @@ async def recieve(data: dict):
     #results(data)
 
     t = Total()
-    inp = d.get("data", None)
+    inp = data.get("data", None)
     inpp = inp.get("value", None)
 
     in_arr = inpp.split("\n")
 
     for ingri in in_arr:
         Reader(ingri, t)
+        print(t.cal)
 
-    return t.cal, t.prot, t.chole, t.carb, t.fiber, t.fat, t.sugar\
-    
+    return t.cal, t.prot, t.chole, t.carb, t.fiber, t.fat, t.sugar
 
-def input(d: dict):
+"""@app.get("/results")
+def results():
     t = Total()
-    #inp = d['value']
-    #inp = d.get("value", None)
-    print(d)
+    #inp = d.get("data", None)
+    #inpp = inp.get("value", None)
+    inp = "1 taco\n2 chocolate\n1 mango"
 
-    #print(d.data)
     in_arr = inp.split("\n")
 
     for ingri in in_arr:
         Reader(ingri, t)
+        print(t.prot)
 
-    return t.cal, t.prot, t.chole, t.carb, t.fiber, t.fat, t.sugar
-
-t = Total()
-@app.get("/results")
-def results(d: dict):
-    #t = Total()
-    inp = d.get("data", None)
-    inpp = inp.get("value", None)
-    #inp = "1 taco\n2 chocolate\n1 mango"
-
-    in_arr = inpp.split("\n")
-
-    for ingri in in_arr:
-        Reader(ingri, t)
-
-    return t.cal, t.prot, t.chole, t.carb, t.fiber, t.fat, t.sugar
-
-    
+    return t.cal, t.prot, t.chole, t.carb, t.fiber, t.fat, t.sugar"""
 
 def Reader(ingri, t: Total):
     youarel = api_url + ingri

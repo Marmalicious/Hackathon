@@ -58,16 +58,15 @@ function App() {
 	}
 
 	async function handleUpdate(e) {
-        e.preventDefault();
         const res = await fetch('/api/results');//, {method: form.method, body: formData});
         const data = await res.json();
 		setCalories(data[0]);
-		setFat(data[1].toFixed(1));
+		setProtein(data[1].toFixed(1));
 		setCholesterol(data[2].toFixed(1));
 		setCarbohydrates(data[3].toFixed(1));
 		setFiber(data[4].toFixed(1));
-		setSugar(data[5].toFixed(1));
-		setProtein(data[6].toFixed(1));
+		setFat(data[5].toFixed(1));
+		setSugar(data[6].toFixed(1));
 		console.log(data);
     }
 
@@ -106,22 +105,27 @@ function App() {
 		const formData = new FormData(form);
 		//console.log({ value});
 		
-		try {
-			const res = await fetch('/api/input', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({ data: { value } }),
-			});
-			if (!res.ok) {
-				console.log("rip")
-			}
-			console.log(await res.json())
-			handleUpdate();
-		} catch (e) {
-			console.log(e)
+		const res = await fetch('/api/input', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ data: { value } }),
+		});
+		if (!res.ok) {
+			console.log("rip")
 		}
+		console.log(res);
+		const data = await res.json();
+		//handleUpdate();
+		setCalories(data[0]);
+		setProtein(data[1].toFixed(1));
+		setCholesterol(data[2].toFixed(1));
+		setCarbohydrates(data[3].toFixed(1));
+		setFiber(data[4].toFixed(1));
+		setFat(data[5].toFixed(1));
+		setSugar(data[6].toFixed(1));
+		console.log(data);
 
 			
 		//const formData = new FormData(form);
@@ -208,7 +212,7 @@ function App() {
 				</form>
 				<div className="nutritionInfo">
 					<h2>Nutrition</h2>
-					<div className="nutrItem"><div className="label">Calories:</div><div className="value">{randomItem}</div></div>
+					<div className="nutrItem"><div className="label">Calories:</div><div className="value">{calories}</div></div>
 					<div className="nutrItem"><div className="label">Total Fat:</div><div className="value">{fat}g</div></div>
 					<div className="nutrItem"><div className="label">Cholesterol:</div><div className="value">{cholesterol}g</div></div>
 					<div className="nutrItem"><div className="label">Carbohydrates:</div><div className="value">{carbohydrates}g</div></div>
