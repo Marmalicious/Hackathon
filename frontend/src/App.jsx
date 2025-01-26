@@ -178,10 +178,10 @@ function App() {
 		<>
 			<p className="names">By Laviero Mancinelli and Thomas Nguyen</p>
 			<h1>Ingredient Nutrition Finder</h1>
-			<img className="chickenImg" src="../public/images/chicken.png"/>
-			<img className="tacoImg" src="../public/images/taco.png"/>
-			<img className="chocolateImg" src="../public/images/chocolate.png"/>
-			<img className="sugarImg" src="../public/images/sugar.png"/>
+			<img className="chickenImg" src="../public/chicken.png"/>
+			<img className="tacoImg" src="../public/taco.png"/>
+			<img className="chocolateImg" src="../public/chocolate.png"/>
+			<img className="sugarImg" src="../public/sugar.png"/>
 			<div className="mainDiv">
 				{instrOpen ? <div className="instructions">
 					<h2>How it Works</h2>
