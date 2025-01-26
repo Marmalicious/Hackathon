@@ -300,3 +300,9 @@
 
 	z-index: -1;
 }
+
+.names {
+	margin: 0;
+	line-height: 0;
+	color: gray;
+}

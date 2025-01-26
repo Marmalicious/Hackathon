@@ -176,6 +176,7 @@ function App() {
 	*/
 	return (
 		<>
+			<p className="names">By Laviero Mancinelli and Thomas Nguyen</p>
 			<h1>Ingredient Nutrition Finder</h1>
 			<img className="chickenImg" src="../images/chicken.png"/>
 			<img className="tacoImg" src="../images/taco.png"/>
