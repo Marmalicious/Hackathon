@@ -118,6 +118,8 @@ def Updater(init, t: Total):
 def Parser(top, key): 
     middle = top.get("totalNutrients", None)
     ground = middle.get(key, None)
+    if ground == None:
+        return 0;
     return ground.get("quantity", 0)
 
 
