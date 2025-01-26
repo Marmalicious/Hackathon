@@ -36,7 +36,7 @@ function App() {
 			}
 		};
 		const handleClick = (event) => {
-			console.log(instrOpen);
+			//console.log(instrOpen);
 			if(instrOpen && instrButRef.current && !instrButRef.current.contains(event.target)) {
 				setInstrOpen(false);
 			}
@@ -53,22 +53,90 @@ function App() {
 		setInputValue(event.target.value);
 	};
 
+	const handleRand = (event) => {
+		getRandomItem();
+	}
 
-	function handleSubmit(e) {
+	async function handleUpdate(e) {
+        e.preventDefault();
+        const res = await fetch('/api/results');//, {method: form.method, body: formData});
+        const data = await res.json();
+		setCalories(data[0]);
+		setFat(data[1].toFixed(1));
+		setCholesterol(data[2].toFixed(1));
+		setCarbohydrates(data[3].toFixed(1));
+		setFiber(data[4].toFixed(1));
+		setSugar(data[5].toFixed(1));
+		setProtein(data[6].toFixed(1));
+		console.log(data);
+    }
+
+	/*
+	async function handleSubmit(e) {
+        e.preventDefault();
+        const form = e.target;
+        const formData = new FormData(form);
+
+        const res = await fetch("/api/unc",
+            {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: "POST",
+                body: "81"
+            })
+        const data = await res.json();
+        console.log(res);
+    }
+		*/
+
+
+
+	
+	async function handleSubmit(e) {
 		e.preventDefault();
 		const form = e.target;
-		//const value = e.target.input.value;
+		const value = e.target.input.value;
 		//const splitValue = inputValue.split('\n');
 		//splitValue.forEach((line) => {
 		//	fetch('/api/input', {method: form.method, body: line});
 		//})
 		//console.log();
 		const formData = new FormData(form);
-		fetch('/api/input', {method: form.method, body: formData});
-		console.log(formData);
+		//console.log({ value});
+		
+		try {
+			const res = await fetch('/api/input', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ data: { value } }),
+			});
+			if (!res.ok) {
+				console.log("rip")
+			}
+			console.log(await res.json())
+			handleUpdate();
+		} catch (e) {
+			console.log(e)
+		}
+
+			
+		//const formData = new FormData(form);
+		//const temp = fetch('/api/input', {method: form.method, body: formData});
+		//const data = await temp.json();
+		////console.log(formData);
+		//setCalories(0);
+
+		//fetch('/api/input', {method: form.method, body: formData});
+		//console.log(formData);
 		//const formJson = Object.fromEntries(formData.entries());
     	//console.log(formJson);
 	}
+		
+		
 
 	async function getRandomItem() {
 		/*
@@ -134,12 +202,13 @@ function App() {
 					<textarea className="inputField" name='input' placeholder="Quantity, unit, ingredient name..."></textarea>
 					<div className="buttonArea">
 						<button className="enter" onClick={handleEnter}>Enter</button>
+						<button className="getreand" onClick={handleUpdate}>Random</button>
 						<button className="infoButton" ref={instrButRef} onClick={handleInstrClick}>How it Works</button>
 					</div>
 				</form>
 				<div className="nutritionInfo">
 					<h2>Nutrition</h2>
-					<div className="nutrItem"><div className="label">Calories:</div><div className="value">{calories}</div></div>
+					<div className="nutrItem"><div className="label">Calories:</div><div className="value">{randomItem}</div></div>
 					<div className="nutrItem"><div className="label">Total Fat:</div><div className="value">{fat}g</div></div>
 					<div className="nutrItem"><div className="label">Cholesterol:</div><div className="value">{cholesterol}g</div></div>
 					<div className="nutrItem"><div className="label">Carbohydrates:</div><div className="value">{carbohydrates}g</div></div>
