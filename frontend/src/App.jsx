@@ -59,16 +59,15 @@ function App() {
 	}
 
 	async function handleUpdate(e) {
-        e.preventDefault();
         const res = await fetch('/api/results');//, {method: form.method, body: formData});
         const data = await res.json();
 		setCalories(data[0]);
-		setFat(data[1].toFixed(1));
+		setProtein(data[1].toFixed(1));
 		setCholesterol(data[2].toFixed(1));
 		setCarbohydrates(data[3].toFixed(1));
 		setFiber(data[4].toFixed(1));
-		setSugar(data[5].toFixed(1));
-		setProtein(data[6].toFixed(1));
+		setFat(data[5].toFixed(1));
+		setSugar(data[6].toFixed(1));
 		console.log(data);
     }
 
