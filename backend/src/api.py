@@ -62,10 +62,6 @@ class Total:
 
 @app.post("/input")
 async def recieve(data: dict):
-    print("HELLO I AM HERE")
-    print(data)
-    #results(data)
-
     t = Total()
     inp = data.get("data", None)
     inpp = inp.get("value", None)
@@ -74,7 +70,6 @@ async def recieve(data: dict):
 
     for ingri in in_arr:
         Reader(ingri, t)
-        print(t.cal)
 
     return t.cal, t.prot, t.chole, t.carb, t.fiber, t.fat, t.sugar
 
@@ -103,7 +98,7 @@ def Updater(init, t: Total):
     t.cal += init.get("calories", 0)
     t.prot += Parser(init, "PROCNT")
     t.chole += Parser(init, "CHOLE")
-    t.carb += Parser(init, "CHOCDF.net")
+    t.carb += Parser(init, "CHOCDF")
     t.fiber += Parser(init, "FIBTG")
     t.fat += Parser(init, "FAT")
     t.sugar += Parser(init, "SUGAR")
@@ -111,8 +106,27 @@ def Updater(init, t: Total):
     return
 
 def Parser(top, key): 
+    if (top == None):
+        print("Fork")
+        return 0
+
     middle = top.get("totalNutrients", None)
+
+    if (middle == None):
+        print(top)
+        return 0
 
     ground = middle.get(key, None)
 
-    return ground.get("quantity", 0);
+    if (ground == None):
+        print(middle)
+        return 0
+
+    return ground.get("quantity", 0)
+
+@app.get("/test")
+def toktok():
+    youarel = api_url + "1 bread"
+    init = requests.get(youarel).json()
+    #return youarel
+    return init
