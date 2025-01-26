@@ -49,7 +49,7 @@ app_id = "69db25ee"
 app_key = "bc0d82f7d39679d94a75479fea326686"
 
 class Total:
-    def __init__(self, cal=0, prot=0, chole=0, carb=0, fiber=0, fat=0, sugar=0):
+    def __init__(self, cal=0, prot=0, chole=0, carb=0, fiber=0, fat=0, sugar=0, error=""):
         self.cal = cal
         self.prot = prot
         self.chole = chole
@@ -57,6 +57,7 @@ class Total:
         self.fiber = fiber
         self.fat = fat
         self.sugar = sugar
+        self.error = error
 
     #def __str__(self):
 
@@ -65,13 +66,12 @@ async def recieve(data: dict):
     t = Total()
     inp = data.get("data", None)
     inpp = inp.get("value", None)
-
     in_arr = inpp.split("\n")
 
     for ingri in in_arr:
         Reader(ingri, t)
 
-    return t.cal, t.prot, t.chole, t.carb, t.fiber, t.fat, t.sugar
+    return t.cal, t.prot, t.chole, t.carb, t.fiber, t.fat, t.sugar, t.error
 
 """@app.get("/results")
 def results():
@@ -90,9 +90,17 @@ def results():
 
 def Reader(ingri, t: Total):
     youarel = api_url + ingri
+    if ingri == "":
+        t.error = "Empty Line!"
+        return
+
     init = requests.get(youarel).json()
+    if init.get("totalNutrients", None).get("ENERC_KCAL", None) == None:
+        t.error = "Invalid Ingredient or Quantity!"
+        return
 
     return Updater(init, t);
+
 
 def Updater(init, t: Total):
     t.cal += init.get("calories", 0)
@@ -102,31 +110,21 @@ def Updater(init, t: Total):
     t.fiber += Parser(init, "FIBTG")
     t.fat += Parser(init, "FAT")
     t.sugar += Parser(init, "SUGAR")
-
     return
 
+
 def Parser(top, key): 
-    if (top == None):
-        print("Fork")
-        return 0
-
     middle = top.get("totalNutrients", None)
-
-    if (middle == None):
-        print(top)
-        return 0
-
     ground = middle.get(key, None)
-
     if (ground == None):
-        print(middle)
         return 0
 
     return ground.get("quantity", 0)
 
+
 @app.get("/test")
 def toktok():
-    youarel = api_url + "1 bread"
+    youarel = api_url + "1 chicken"
     init = requests.get(youarel).json()
     #return youarel
     return init
