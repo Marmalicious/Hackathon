@@ -146,7 +146,6 @@
 	flex-direction: column;
 	align-items: column;
 	padding-bottom: 15px;
-	margin-top: 20px;
 }
 
 .nutritionInfo .nutrItem {
@@ -175,7 +174,12 @@
 .infoButton {
 	color: white;
 	margin: 1vw;
-	background-color: gray;
+	background-color: #a15e49;
+}
+
+.loading {
+	margin: 1vw;
+	font-size: 20px;
 }
 
 .inputForm {
@@ -206,6 +210,7 @@
 .enter {
 	color: white;
 	margin: 1vw;
+	background-color: maroon;
 } 
 
 .instructions {
@@ -231,6 +236,67 @@
 	background-color: gray;
 }
 
+.error {
+	border-radius: 4px;
+	margin: 10px;
+	width: 60vw;
+	font-size: 24px;
+}
+
+.ingrList {
+	background-color: beige;
+	width: 60vw;
+	margin-top: 20px;
+	padding-bottom: 10px;
+	font-size: 22px;
+	line-height: 24px;
+	white-space: pre-wrap;
+}
+.ingrList h2 {
+	font-size: 24px;
+}
+
 .read-the-docs {
 	color: #888;
+}
+
+.chickenImg {
+	position: fixed;
+	left: 20px;
+	top: -100px;
+	scale: 0.8;
+
+	z-index: -1;
+}
+
+.tacoImg {
+	position: fixed;
+	right: -160px;
+	top: 30px;
+	scale: 0.5;
+
+	z-index: -1;
+}
+
+
+.chocolateImg {
+	position: fixed;
+	right: 60px;
+	bottom: 30px;
+	rotate: -30deg;
+	scale: 1;
+
+	z-index: -1;
+}
+
+
+.sugarImg {
+	position: fixed;
+	left: 60px;
+	bottom: 30px;
+	rotate: 30deg;
+	transform: scaleX(-1);
+	scale: 1;
+
+	z-index: -1;
 }

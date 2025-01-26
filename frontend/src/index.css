@@ -5,8 +5,9 @@
 
 	color-scheme: light;
 	color: rgb(255, 255, 255);
-	background-color: #f1f1f1; /*#242424*/
-
+	/*background-color: rgb(221, 216, 172);*/
+	/*background-color: #f1f1f1; /*#242424*/
+	background: linear-gradient(135deg, rgba(247,245,231,1) 0%, rgba(241,241,241,1) 35%, rgba(246,246,246,1) 100%);
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
@@ -33,13 +34,16 @@ body {
 }
 
 h1 {
-	font-size: 3.2em;
+	font-size: 48px;
 	line-height: 1.1;
-	color: gray;
+	color: rgb(48, 48, 48);
+	font-family:'Times New Roman', Times, serif;
+	text-transform: uppercase;
+	background-color: white;
 }
 
 button {
-	border-radius: 8px;
+	border-radius: 6px;
 	border: 1px solid transparent;
 	padding: 0.6em 1.2em;
 	font-size: 1em;
