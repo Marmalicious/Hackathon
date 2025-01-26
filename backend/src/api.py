@@ -4,7 +4,7 @@ To run this API, use the FastAPI CLI
 $ fastapi dev src/api.py
 """
 
-import random, requests
+import random, requests, re
 
 from fastapi import FastAPI
 from pydantic import BaseModel
@@ -64,14 +64,15 @@ class Total:
 @app.post("/input")
 async def recieve(data: dict):
     t = Total()
+    ret = [];
     inp = data.get("data", None)
     inpp = inp.get("value", None)
-    in_arr = inpp.split("\n")
+    in_arr = re.split("\n|, |,", inpp)
 
     for ingri in in_arr:
-        Reader(ingri, t)
+        Reader(ingri, t, ret)
 
-    return t.cal, t.prot, t.chole, t.carb, t.fiber, t.fat, t.sugar, t.error
+    return t.cal, t.prot, t.chole, t.carb, t.fiber, t.fat, t.sugar, t.error, ret
 
 """@app.get("/results")
 def results():
@@ -88,7 +89,7 @@ def results():
 
     return t.cal, t.prot, t.chole, t.carb, t.fiber, t.fat, t.sugar"""
 
-def Reader(ingri, t: Total):
+def Reader(ingri, t: Total, ret):
     youarel = api_url + ingri
     if ingri == "":
         t.error = "Empty Line!"
@@ -99,7 +100,8 @@ def Reader(ingri, t: Total):
         t.error = "Invalid Ingredient or Quantity!"
         return
 
-    return Updater(init, t);
+    InputReturn(init, ret)
+    return Updater(init, t)
 
 
 def Updater(init, t: Total):
@@ -116,15 +118,21 @@ def Updater(init, t: Total):
 def Parser(top, key): 
     middle = top.get("totalNutrients", None)
     ground = middle.get(key, None)
-    if (ground == None):
-        return 0
-
     return ground.get("quantity", 0)
+
+
+def InputReturn(top, ret):
+    middle = top.get("ingredients")
+    ground = middle[0].get("parsed")
+    ret.append(ground[0].get("quantity"))
+    ret.append(ground[0].get("measure"))
+    ret.append(ground[0].get("food"))
+    return
 
 
 @app.get("/test")
 def toktok():
-    youarel = api_url + "1 chicken"
+    youarel = api_url + "1 tacos"
     init = requests.get(youarel).json()
     #return youarel
     return init
